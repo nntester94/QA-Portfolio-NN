@@ -1,0 +1,10 @@
+Name = "Goodwill Academy"
+print(Name +" is great" )
+print(Name.lower())
+print(Name.upper() )
+print(Name.isupper())
+print(len(Name))
+print(Name[4])
+print(Name.index("G"))
+print(Name.index("will"))
+print(Name.replace("Goodwill","Grace"))
