@@ -1,0 +1,640 @@
+{
+	"info": {
+		"_postman_id": "e658ab3d-c2a3-4952-b5d4-230e0102df39",
+		"name": "Contact Lists",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38878408"
+	},
+	"item": [
+		{
+			"name": "basic end point test",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"variable_key\", \"variable_value\");",
+									"pm.environment.set(\"token\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"namhere@fake.com\",\n    \"password\": \"namhere123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contactlisturl}}/users/login",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get contact list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contactlisturl}}/contacts",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"createdContactId\", jsonData[\"_id\"]);",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Amy\",\n    \"lastName\": \"Here\",\n    \"birthdate\": \"1994-10-10\",\n    \"email\": \"jschmoe@fake.com\",\n    \"phone\": \"8005552001\",\n    \"street1\": \"456 Oak St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Toronto\",\n    \"stateProvince\": \"Ontario\",\n    \"postalCode\": \"M3C 0H9\",\n    \"country\": \"Canada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contactlisturl}}/contacts",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct contact is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"amyjoseph10@fake.com\");",
+									"});",
+									"pm.test(\"Correct contact is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"8005552001\");",
+									"});",
+									"  var jsonData = pm.response.json();",
+									"pm.test(\"Correct first name is returned\", function () {",
+									"    pm.expect(jsonData.firstName).to.eql(\"Amy\");",
+									"});",
+									"",
+									"pm.test(\"Correct first name is returned\", function () {",
+									"    var expectedFirstName = \"Amy\";",
+									"    pm.expect(jsonData.firstName).to.eql(expectedFirstName);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contactlisturl}}/contacts/{{contactId}}",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get contact Using Dynamic Env Variable",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct contact is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"amyjoseph10@fake.com\");",
+									"});",
+									"pm.test(\"Correct contact is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"8005552001\");",
+									"});",
+									"  var jsonData = pm.response.json();",
+									"pm.test(\"Correct first name is returned\", function () {",
+									"    pm.expect(jsonData.firstName).to.eql(\"Amy\");",
+									"});",
+									"",
+									"pm.test(\"Correct first name is returned\", function () {",
+									"    var expectedFirstName = \"Amy\";",
+									"    pm.expect(jsonData.firstName).to.eql(expectedFirstName);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"urlFormed =",
+									"    pm.environment.get(\"contactlisturl\")+\"/contacts/\"+pm.environment.get(\"createdContactId\");",
+									"pm.environment.set(\"URL\", urlFormed);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}",
+							"host": [
+								"{{URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct contact is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"amyjoseph10@fake.com\");",
+									"});",
+									"pm.test(\"Correct first name is returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.firstName).to.eql(\"Amy\");",
+									"});",
+									"pm.test(\"Correct contact is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"8005552001\");",
+									"});",
+									"pm.test(\"Correct first name is returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var expectedFirstName = \"Amy\";",
+									"    pm.expect(jsonData.firstName).to.eql(expectedFirstName);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{contactlisturl}}/contacts/{{contactId}}",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Amy\",\n    \"lastName\": \"Jos\",\n    \"birthdate\": \"1994-10-10\",\n    \"email\": \"amyjoseph10@fake.com\",\n    \"phone\": \"8005552001\",\n    \"street1\": \"456 Oak St.\",\n    \"street2\": \"Unit 5\",\n    \"city\": \"Toronto\",\n    \"stateProvince\": \"Ontario\",\n    \"postalCode\": \"M3C 0H9\",\n    \"country\": \"Canada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contactlisturl}}/contacts/{{contactId}}",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "negative test",
+			"item": [
+				{
+					"name": "Add contact too long",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Amyaamyamayaamyamayaaaamayamayamayaamayaamayaaaayyaayaya\",\n    \"lastName\": \"Here\",\n    \"birthdate\": \"1994-10-10\",\n    \"email\": \"jschmoe@fake.com\",\n    \"phone\": \"8005552001\",\n    \"street1\": \"456 Oak St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Toronto\",\n    \"stateProvince\": \"Ontario\",\n    \"postalCode\": \"M3C 0H9\",\n    \"country\": \"Canada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contactlisturl}}/contacts",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get contact not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contactlisturl}}/contacts/670e9a59f4f5a80013d48aac",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts",
+								"670e9a59f4f5a80013d48aac"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get contact list Unauth",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contactlisturl}}/contacts",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add contact missing req field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Email is invalid error message is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Email is invalid\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Amy\",\n    \"lastName\": \"Jos\",\n    \"birthdate\": \"1994-10-10\",\n    \"email\": \"\",\n    \"phone\": \"8005552001\",\n    \"street1\": \"456 Oak St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Toronto\",\n    \"stateProvince\": \"Ontario\",\n    \"postalCode\": \"M3C 0H9\",\n    \"country\": \"Canada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contactlisturl}}/contacts",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact invalid email id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"variable_key\", \"variable_value\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzBlODY1OWY0ZjVhODAwMTNkMjhhODkiLCJpYXQiOjE3MjkwMTE3MzZ9.ZXUitecp96-2PikFzHlxTWC8-Htd3mG2WtvqrBVdRFQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Amy\",\n    \"lastName\": \"Joseph\",\n    \"birthdate\": \"1994-10-10\",\n    \"email\": \"amyjoseph10\",\n    \"phone\": \"8005552001\",\n    \"street1\": \"456 Oak St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Toronto\",\n    \"stateProvince\": \"Ontario\",\n    \"postalCode\": \"M3C 0H9\",\n    \"country\": \"Canada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contactlisturl}}/contacts/670ea8e35cd1eb00134e55e5",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts",
+								"670ea8e35cd1eb00134e55e5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact invalid birthday Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid birthdate error message is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Birthdate is invalid\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Amy\",\n    \"lastName\": \"Joseph\",\n    \"birthdate\": \"1994-10-32\",\n    \"email\": \"amyjoseph10@fake.com\",\n    \"phone\": \"8005552001\",\n    \"street1\": \"456 Oak St.\",\n    \"street2\": \"Unit 2\",\n    \"city\": \"Toronto\",\n    \"stateProvince\": \"Ontario\",\n    \"postalCode\": \"M3C 0H9\",\n    \"country\": \"Canada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contactlisturl}}/contacts/670ea8e35cd1eb00134e55e5",
+							"host": [
+								"{{contactlisturl}}"
+							],
+							"path": [
+								"contacts",
+								"670ea8e35cd1eb00134e55e5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Response time is less than 3000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(3000);",
+					"});"
+				]
+			}
+		}
+	]
+}
